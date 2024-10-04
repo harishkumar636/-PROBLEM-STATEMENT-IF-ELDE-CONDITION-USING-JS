@@ -1,0 +1,49 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        document.write("your menu <br> 1.pizza $200 <br> 2.burger $300 <br> 3.chicken biriyani $250 <br> 4.apple juice $80 <br> 5.chocolate $100")
+        let d = prompt("do you want to continue put y if no put n")
+        let sum = 0
+        while(d==='y'){
+            let ch =  prompt("enter choice 1 for pizza 2 for burger 3 for biriyani(chicken) 4 for apple 5 for chocolate")
+            let quant = prompt("enter quantity")
+        switch(ch){
+            case "1":
+                sum += parseInt(quant)*200
+                break
+            case "2":
+                sum+= parseInt(quant)*300
+                break
+            case "3":
+                sum+= parseInt(quant)*250
+                break
+            case "4":
+                sum+= parseInt(quant)*80
+                break
+            case "5":
+                sum += parseInt(quant)*100
+                break
+            default:
+                console.log("invalid choice not in menu")
+        }
+        ch = prompt("order more put y or n")
+        if(ch==="n"){
+            break
+        }
+    }
+
+        if(sum > 500){
+            sum -= (sum/100)*10
+            console.log(sum)
+        }
+    
+        console.log(sum)
+
+    </script>
+</body>
+</html>
