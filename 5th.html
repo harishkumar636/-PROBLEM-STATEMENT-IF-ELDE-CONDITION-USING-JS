@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ice Cream Shop Inventory</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+            border: 2px solid #ffcc00;
+            border-radius: 10px;
+            background-color: rgba(0, 0, 0, 0.8); /* Slightly transparent background */
+        }
+        h1, h2 {
+            color: #ffcc00; /* A bright yellow for headers */
+        }
+        input, button {
+            margin: 5px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        input {
+            background-color: #222;
+            color: white;
+        }
+        button {
+            background-color: #ffcc00; /* Yellow for buttons */
+            color: black;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #ff9900; /* Darker yellow on hover */
+        }
+        .inventory {
+            margin-top: 20px;
+            border-top: 1px solid #ffcc00;
+            padding-top: 10px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 5px 0;
+            padding: 5px;
+            background-color: #333;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Ice Cream Shop Inventory</h1>
+
+    <h2>Add New Ice Cream</h2>
+    <label for="flavor">Flavor:</label>
+    <input type="text" id="flavor" placeholder="Flavor"><br>
+    <label for="price">Price:</label>
+    <input type="number" id="price" placeholder="Price" step="0.01"><br>
+    <label for="quantity">Quantity:</label>
+    <input type="number" id="quantity" placeholder="Quantity"><br>
+    <button onclick="addIceCream()">Add Ice Cream</button>
+
+    <h2>Update Ice Cream</h2>
+    <label for="updateFlavor">Flavor:</label>
+    <input type="text" id="updateFlavor" placeholder="Flavor"><br>
+    <label for="updatePrice">New Price:</label>
+    <input type="number" id="updatePrice" placeholder="New Price" step="0.01"><br>
+    <label for="updateQuantity">New Quantity:</label>
+    <input type="number" id="updateQuantity" placeholder="New Quantity"><br>
+    <button onclick="updateIceCream()">Update Ice Cream</button>
+
+    <h2>Total Inventory Value</h2>
+    <button onclick="calculateTotalValue()">Calculate Total Value</button>
+    <p id="totalValue">Total Value: $0.00</p>
+
+    <div class="inventory">
+        <h2>Current Inventory</h2>
+        <ul id="inventoryList"></ul>
+    </div>
+</div>
+
+<script>
+    class IceCream {
+        constructor(flavor, price, quantity) {
+            this.flavor = flavor;
+            this.price = price;
+            this.quantity = quantity;
+        }
+    }
+
+    class IceCreamShop {
+        constructor() {
+            this.inventory = [];
+        }
+
+        addIceCream(flavor, price, quantity) {
+            const newIceCream = new IceCream(flavor, price, quantity);
+            this.inventory.push(newIceCream);
+            this.updateInventoryDisplay();
+        }
+
+        updateIceCream(flavor, newPrice, newQuantity) {
+            const iceCream = this.inventory.find(iceCream => iceCream.flavor === flavor);
+            if (iceCream) {
+                iceCream.price = newPrice;
+                iceCream.quantity = newQuantity;
+                this.updateInventoryDisplay();
+            } else {
+                alert(`Ice cream flavor "${flavor}" not found in inventory.`);
+            }
+        }
+
+        calculateTotalValue() {
+            return this.inventory.reduce((total, iceCream) => {
+                return total + (iceCream.price * iceCream.quantity);
+            }, 0);
+        }
+
+        updateInventoryDisplay() {
+            const inventoryList = document.getElementById('inventoryList');
+            inventoryList.innerHTML = '';
+            this.inventory.forEach(iceCream => {
+                const li = document.createElement('li');
+                li.textContent = `${iceCream.flavor}: $${iceCream.price.toFixed(2)}, Quantity: ${iceCream.quantity}`;
+                inventoryList.appendChild(li);
+            });
+        }
+    }
+
+    const shop = new IceCreamShop();
+
+    function addIceCream() {
+        const flavor = document.getElementById('flavor').value;
+        const price = parseFloat(document.getElementById('price').value);
+        const quantity = parseInt(document.getElementById('quantity').value);
+
+        if (flavor && !isNaN(price) && !isNaN(quantity)) {
+            shop.addIceCream(flavor, price, quantity);
+            document.getElementById('flavor').value = '';
+            document.getElementById('price').value = '';
+            document.getElementById('quantity').value = '';
+        } else {
+            alert('Please fill in all fields correctly.');
+        }
+    }
+
+    function updateIceCream() {
+        const flavor = document.getElementById('updateFlavor').value;
+        const newPrice = parseFloat(document.getElementById('updatePrice').value);
+        const newQuantity = parseInt(document.getElementById('updateQuantity').value);
+
+        if (flavor && !isNaN(newPrice) && !isNaN(newQuantity)) {
+            shop.updateIceCream(flavor, newPrice, newQuantity);
+            document.getElementById('updateFlavor').value = '';
+            document.getElementById('updatePrice').value = '';
+            document.getElementById('updateQuantity').value = '';
+        } else {
+            alert('Please fill in all fields correctly.');
+        }
+    }
+
+    function calculateTotalValue() {
+        const totalValue = shop.calculateTotalValue();
+        document.getElementById('totalValue').textContent = `Total Value: $${totalValue.toFixed(2)}`;
+    }
+</script>
+
+</body>
+</html>
