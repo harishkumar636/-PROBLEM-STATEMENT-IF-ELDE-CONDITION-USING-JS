@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Color Change Buttons</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column; /* Allow vertical stacking */
+        }
+
+        .title {
+            font-size: 36px; /* Adjust the font size for the title */
+            margin-bottom: 20px; /* Space between the title and buttons */
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .red-btn { background-color: red; color: white; }
+        .blue-btn { background-color: blue; color: white; }
+        .green-btn { background-color: green; color: white; }
+        .reset-btn { background-color: transparent; color: black; border: 2px solid black; }
+
+        .btn:hover { transform: scale(1.05); }
+    </style>
+</head>
+<body>
+    <h1 class="title">Color Change Buttons</h1> <!-- Added title -->
+    <div class="button-container">
+        <button class="btn red-btn" aria-label="Change background to red" onclick="changeColor('red', this)">Red</button>
+        <button class="btn blue-btn" aria-label="Change background to blue" onclick="changeColor('blue', this)">Blue</button>
+        <button class="btn green-btn" aria-label="Change background to green" onclick="changeColor('green', this)">Green</button>
+        <button class="btn reset-btn" aria-label="Reset background color" onclick="resetColor()">Reset</button>
+    </div>
+    
+    <script>
+        let originalColor = "white";
+
+        function changeColor(color, button) {
+            document.body.style.backgroundColor = color; 
+            button.style.color = "transparent"; 
+            button.style.backgroundColor = "";
+        }
+
+        function resetColor() {
+            document.body.style.backgroundColor = originalColor; 
+            document.querySelector('.red-btn').style.color = 'white';
+            document.querySelector('.red-btn').style.backgroundColor = 'red';
+            document.querySelector('.blue-btn').style.color = 'white';
+            document.querySelector('.blue-btn').style.backgroundColor = 'blue';
+            document.querySelector('.green-btn').style.color = 'white';
+            document.querySelector('.green-btn').style.backgroundColor = 'green';
+        }
+    </script>
+</body>
+</html>
