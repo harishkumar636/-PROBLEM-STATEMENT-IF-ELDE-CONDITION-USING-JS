@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train Schedule Manager</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #4a90e2;
+        }
+        input {
+            padding: 10px;
+            margin: 5px;
+            border: 2px solid #4a90e2;
+            border-radius: 4px;
+            width: calc(30% - 22px);
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #357ab8;
+        }
+        table {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 100%;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            border: 1px solid #4a90e2;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #4a90e2;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #eaf6ff;
+        }
+        tr:hover {
+            background-color: #d1e7ff;
+        }
+        .form-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Train Schedule Manager</h1>
+
+<div class="form-container">
+    <input type="text" id="trainNumber" placeholder="Train Number" required>
+    <input type="text" id="arrivalTime" placeholder="Arrival Time (e.g., 10:00 AM)" required>
+    <input type="text" id="departureTime" placeholder="Departure Time (e.g., 10:30 AM)" required>
+    <button onclick="addTrain()">Add Train</button>
+</div>
+
+<h2>Current Train Schedule:</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Train Number</th>
+            <th>Arrival Time</th>
+            <th>Departure Time</th>
+        </tr>
+    </thead>
+    <tbody id="scheduleTable">
+    </tbody>
+</table>
+
+<script>
+    const schedule = {
+        trains: [],
+        addTrain: function(trainNumber, arrivalTime, departureTime) {
+            this.trains.push({ trainNumber, arrivalTime, departureTime });
+            this.displaySchedule();
+        },
+        displaySchedule: function() {
+            const tableBody = document.getElementById('scheduleTable');
+            tableBody.innerHTML = ''; // Clear existing rows
+            this.trains.forEach(train => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${train.trainNumber}</td>
+                    <td>${train.arrivalTime}</td>
+                    <td>${train.departureTime}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+    };
+
+    function addTrain() {
+        const trainNumber = document.getElementById('trainNumber').value;
+        const arrivalTime = document.getElementById('arrivalTime').value;
+        const departureTime = document.getElementById('departureTime').value;
+
+        if (trainNumber && arrivalTime && departureTime) {
+            schedule.addTrain(trainNumber, arrivalTime, departureTime);
+            document.getElementById('trainNumber').value = '';
+            document.getElementById('arrivalTime').value = '';
+            document.getElementById('departureTime').value = '';
+        } else {
+            alert("Please fill in all fields.");
+        }
+    }
+</script>
+
+</body>
+</html>
