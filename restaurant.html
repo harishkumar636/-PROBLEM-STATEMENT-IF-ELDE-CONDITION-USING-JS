@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Restaurant Reservation System</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #F3F3F3;
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    h1 {
+      font-size: 2.5rem;
+      color: #FFD700;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+      margin-bottom: 20px;
+    }
+    form {
+      background-color: #1E1E1E;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+      width: 100%;
+      max-width: 400px;
+    }
+    label {
+      font-size: 1rem;
+      color: #AFAFAF;
+      margin-bottom: 8px;
+      display: block;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      margin-bottom: 15px;
+    }
+    input {
+      background-color: #2A2A2A;
+      color: #F3F3F3;
+      border: 1px solid #333;
+    }
+    input:focus {
+      outline: none;
+      border: 1px solid #FFD700;
+      box-shadow: 0 0 8px #FFD700;
+    }
+    button {
+      background-color: #FFD700;
+      color: #121212;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #FFC300;
+    }
+    table {
+      margin-top: 30px;
+      width: 100%;
+      max-width: 800px;
+      border-collapse: collapse;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #333;
+    }
+    th {
+      background-color: #FFD700;
+      color: #121212;
+      font-size: 1.1rem;
+    }
+    td {
+      background-color: #1E1E1E;
+      color: #F3F3F3;
+    }
+    tr:nth-child(even) td {
+      background-color: #2A2A2A;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Reserve Your Table</h1>
+
+  <form id="reservationForm">
+    <label for="customerName">Your Name:</label>
+    <input type="text" id="customerName" required placeholder="Enter your name">
+
+    <label for="numGuests">Number of Guests:</label>
+    <input type="number" id="numGuests" required min="1" placeholder="Enter number of guests">
+
+    <label for="resTime">Reservation Time:</label>
+    <input type="time" id="resTime" required>
+
+    <button type="submit">Book Reservation</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Customer Name</th>
+        <th>Guests</th>
+        <th>Time</th>
+      </tr>
+    </thead>
+    <tbody id="reservationList"></tbody>
+  </table>
+
+  <script>
+    const reservationForm = document.getElementById('reservationForm');
+    const reservationList = document.getElementById('reservationList');
+
+    reservationForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const customerName = document.getElementById('customerName').value;
+      const numGuests = document.getElementById('numGuests').value;
+      const resTime = document.getElementById('resTime').value;
+
+      if (!customerName || !numGuests || !resTime) {
+        alert('Please fill out all fields.');
+        return;
+      }
+
+      addReservation(customerName, numGuests, resTime);
+      reservationForm.reset();
+    });
+
+    function addReservation(customerName, numGuests, resTime) {
+      const row = document.createElement('tr');
+      const nameCell = document.createElement('td');
+      const guestsCell = document.createElement('td');
+      const timeCell = document.createElement('td');
+
+      nameCell.textContent = customerName;
+      guestsCell.textContent = numGuests;
+      timeCell.textContent = resTime;
+
+      row.appendChild(nameCell);
+      row.appendChild(guestsCell);
+      row.appendChild(timeCell);
+
+      reservationList.appendChild(row);
+    }
+  </script>
+
+</body>
+</html>
