@@ -1,0 +1,216 @@
+<html>
+<head>
+    <title>Railway Station Capacity Tracker</title>
+    <style>
+        /* Styling for body */
+        body {
+            background-color: #111;
+            color: #f0f0f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Container styling */
+        .container {
+            background-color: #222;
+            max-width: 600px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+            text-align: center;
+        }
+
+        h1 {
+            color: #ffcc00;
+            font-size: 28px;
+        }
+
+        h2 {
+            color: #ff9900;
+            margin-bottom: 10px;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+        }
+
+        input {
+            background-color: #333;
+            color: #fff;
+        }
+
+        button {
+            background-color: #ff9900;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #ffcc00;
+        }
+
+        .station-list {
+            margin-top: 20px;
+        }
+
+        .station-list h3 {
+            color: #ffcc00;
+        }
+
+        .station-list p {
+            color: #ff4444;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #333;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        li button {
+            background-color: #ff4444;
+            padding: 5px 10px;
+        }
+
+        li button:hover {
+            background-color: #ff6666;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Railway Station Capacity Tracker</h1>
+
+    <!-- Form to add a railway station -->
+    <h2>Add Station</h2>
+    <input type="text" id="stationName" placeholder="Station Name">
+    <input type="number" id="stationCapacity" placeholder="Station Capacity" min="1">
+    <button onclick="addStation()">Add Station</button>
+
+    <!-- Form to add trains to a station -->
+    <h2>Add Train to Station</h2>
+    <select id="stationSelect">
+        <option value="">Select a Station</option>
+    </select>
+    <button onclick="addTrain()">Add Train</button>
+
+    <!-- List of stations and train count -->
+    <div class="station-list" id="stationList"></div>
+</div>
+
+<script>
+// Station class to manage train counts and capacity
+class Station {
+    constructor(name, capacity) {
+        this.name = name;
+        this.capacity = capacity;
+        this.currentTrains = 0;
+    }
+
+    // Add a train if capacity is not exceeded
+    addTrain() {
+        if (this.currentTrains < this.capacity) {
+            this.currentTrains++;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // Get the current train count
+    getTrainCount() {
+        return this.currentTrains;
+    }
+}
+
+// Store the stations
+const stations = [];
+
+// Function to add a new station
+function addStation() {
+    const stationName = document.getElementById('stationName').value;
+    const stationCapacity = parseInt(document.getElementById('stationCapacity').value);
+
+    if (stationName && stationCapacity > 0) {
+        const newStation = new Station(stationName, stationCapacity);
+        stations.push(newStation);
+        updateStationSelect();
+        displayStations();
+        document.getElementById('stationName').value = '';
+        document.getElementById('stationCapacity').value = '';
+    } else {
+        alert('Please provide a valid station name and capacity.');
+    }
+}
+
+// Update the station dropdown for selecting where to add a train
+function updateStationSelect() {
+    const stationSelect = document.getElementById('stationSelect');
+    stationSelect.innerHTML = '<option value="">Select a Station</option>'; // Reset dropdown
+    stations.forEach((station, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = `${station.name} (Capacity: ${station.capacity})`;
+        stationSelect.appendChild(option);
+    });
+}
+
+// Function to add a train to the selected station
+function addTrain() {
+    const selectedStationIndex = document.getElementById('stationSelect').value;
+
+    if (selectedStationIndex !== '') {
+        const station = stations[selectedStationIndex];
+        if (station.addTrain()) {
+            displayStations();
+        } else {
+            alert(`Station ${station.name} has reached its maximum capacity.`);
+        }
+    } else {
+        alert('Please select a station to add a train.');
+    }
+}
+
+// Function to display all stations with their current train count
+function displayStations() {
+    const stationListDiv = document.getElementById('stationList');
+    stationListDiv.innerHTML = ''; // Clear previous list
+
+    stations.forEach((station) => {
+        const stationDiv = document.createElement('div');
+        stationDiv.innerHTML = `<h3>${station.name} (Capacity: ${station.capacity})</h3>`;
+        
+        if (station.getTrainCount() > 0) {
+            const trainCount = station.getTrainCount();
+            stationDiv.innerHTML += `<p>Current Trains: ${trainCount}/${station.capacity}</p>`;
+        } else {
+            stationDiv.innerHTML += '<p>No trains at this station yet.</p>';
+        }
+
+        stationListDiv.appendChild(stationDiv);
+    });
+}
+</script>
+
+</body>
+</html>
