@@ -2,7 +2,6 @@
 <head>
     <title>Railway Station Capacity Tracker</title>
     <style>
-        /* Styling for body */
         body {
             background-color: #111;
             color: #f0f0f0;
@@ -14,7 +13,6 @@
             margin: 0;
         }
 
-        /* Container styling */
         .container {
             background-color: #222;
             max-width: 600px;
@@ -101,25 +99,21 @@
 <div class="container">
     <h1>Railway Station Capacity Tracker</h1>
 
-    <!-- Form to add a railway station -->
     <h2>Add Station</h2>
     <input type="text" id="stationName" placeholder="Station Name">
     <input type="number" id="stationCapacity" placeholder="Station Capacity" min="1">
     <button onclick="addStation()">Add Station</button>
 
-    <!-- Form to add trains to a station -->
     <h2>Add Train to Station</h2>
     <select id="stationSelect">
         <option value="">Select a Station</option>
     </select>
     <button onclick="addTrain()">Add Train</button>
 
-    <!-- List of stations and train count -->
     <div class="station-list" id="stationList"></div>
 </div>
 
 <script>
-// Station class to manage train counts and capacity
 class Station {
     constructor(name, capacity) {
         this.name = name;
@@ -127,7 +121,6 @@ class Station {
         this.currentTrains = 0;
     }
 
-    // Add a train if capacity is not exceeded
     addTrain() {
         if (this.currentTrains < this.capacity) {
             this.currentTrains++;
@@ -137,16 +130,13 @@ class Station {
         }
     }
 
-    // Get the current train count
     getTrainCount() {
         return this.currentTrains;
     }
 }
 
-// Store the stations
 const stations = [];
 
-// Function to add a new station
 function addStation() {
     const stationName = document.getElementById('stationName').value;
     const stationCapacity = parseInt(document.getElementById('stationCapacity').value);
@@ -163,7 +153,6 @@ function addStation() {
     }
 }
 
-// Update the station dropdown for selecting where to add a train
 function updateStationSelect() {
     const stationSelect = document.getElementById('stationSelect');
     stationSelect.innerHTML = '<option value="">Select a Station</option>'; // Reset dropdown
@@ -175,7 +164,6 @@ function updateStationSelect() {
     });
 }
 
-// Function to add a train to the selected station
 function addTrain() {
     const selectedStationIndex = document.getElementById('stationSelect').value;
 
@@ -191,10 +179,9 @@ function addTrain() {
     }
 }
 
-// Function to display all stations with their current train count
 function displayStations() {
     const stationListDiv = document.getElementById('stationList');
-    stationListDiv.innerHTML = ''; // Clear previous list
+    stationListDiv.innerHTML = ''; 
 
     stations.forEach((station) => {
         const stationDiv = document.createElement('div');
