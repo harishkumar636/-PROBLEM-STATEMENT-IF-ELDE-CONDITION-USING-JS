@@ -2,7 +2,6 @@
 <head>
     <title>Course Enrollment</title>
     <style>
-        /* Styling the body with a black background and creative font and colors */
         body {
             background-color: #111;
             color: #f0f0f0;
@@ -13,8 +12,6 @@
             height: 100vh;
             margin: 0;
         }
-
-        /* Container styling with rounded corners and some shadow effect */
         .container {
             background-color: #222;
             max-width: 600px;
@@ -97,13 +94,11 @@
 <div class="container">
     <h1>Course Enrollment Management</h1>
 
-    <!-- Form for course creation -->
     <h2>Create Course</h2>
     <input type="text" id="courseName" placeholder="Course Name">
     <input type="text" id="courseCode" placeholder="Course Code">
     <button onclick="createCourse()">Create Course</button>
 
-    <!-- Form for enrolling student -->
     <h2>Enroll Student</h2>
     <input type="text" id="studentName" placeholder="Student Name">
     <select id="courseSelect">
@@ -111,12 +106,10 @@
     </select>
     <button onclick="enrollStudent()">Enroll Student</button>
 
-    <!-- List of courses and students -->
     <div class="course-list" id="courseList"></div>
 </div>
 
 <script>
-// Course class
 class Course {
     constructor(name, code) {
         this.name = name;
@@ -124,7 +117,6 @@ class Course {
         this.enrolledStudents = [];
     }
 
-    // Enroll a student
     enrollStudent(studentName) {
         if (!this.enrolledStudents.includes(studentName)) {
             this.enrolledStudents.push(studentName);
@@ -133,25 +125,19 @@ class Course {
             return false;
         }
     }
-
-    // Remove a student
     removeStudent(studentName) {
         const index = this.enrolledStudents.indexOf(studentName);
         if (index !== -1) {
             this.enrolledStudents.splice(index, 1);
         }
     }
-
-    // Get the list of students
     listStudents() {
         return this.enrolledStudents;
     }
 }
 
-// Store courses
 const courses = [];
 
-// Function to create a course
 function createCourse() {
     const courseName = document.getElementById('courseName').value;
     const courseCode = document.getElementById('courseCode').value;
@@ -168,7 +154,6 @@ function createCourse() {
     }
 }
 
-// Update course select dropdown
 function updateCourseSelect() {
     const courseSelect = document.getElementById('courseSelect');
     courseSelect.innerHTML = '<option value="">Select a Course</option>'; // Reset
@@ -180,7 +165,6 @@ function updateCourseSelect() {
     });
 }
 
-// Function to enroll a student in a selected course
 function enrollStudent() {
     const studentName = document.getElementById('studentName').value;
     const selectedCourseIndex = document.getElementById('courseSelect').value;
@@ -198,17 +182,15 @@ function enrollStudent() {
     }
 }
 
-// Function to remove a student from a course
 function removeStudent(courseIndex, studentName) {
     const course = courses[courseIndex];
     course.removeStudent(studentName);
     displayCourses();
 }
 
-// Function to display all courses and students
 function displayCourses() {
     const courseListDiv = document.getElementById('courseList');
-    courseListDiv.innerHTML = ''; // Clear previous list
+    courseListDiv.innerHTML = ''; 
 
     courses.forEach((course, courseIndex) => {
         const courseDiv = document.createElement('div');
