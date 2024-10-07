@@ -1,0 +1,240 @@
+<html>
+<head>
+    <title>Course Enrollment</title>
+    <style>
+        /* Styling the body with a black background and creative font and colors */
+        body {
+            background-color: #111;
+            color: #f0f0f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Container styling with rounded corners and some shadow effect */
+        .container {
+            background-color: #222;
+            max-width: 600px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+            text-align: center;
+        }
+
+        h1 {
+            color: #ffcc00;
+            font-size: 28px;
+        }
+
+        h2 {
+            color: #ff9900;
+            margin-bottom: 10px;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+        }
+
+        input, select {
+            background-color: #333;
+            color: #fff;
+        }
+
+        button {
+            background-color: #ff9900;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #ffcc00;
+        }
+
+        .course-list {
+            margin-top: 20px;
+        }
+
+        .course-list h3 {
+            color: #ffcc00;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #333;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        li button {
+            background-color: #ff4444;
+            padding: 5px 10px;
+        }
+
+        li button:hover {
+            background-color: #ff6666;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Course Enrollment Management</h1>
+
+    <!-- Form for course creation -->
+    <h2>Create Course</h2>
+    <input type="text" id="courseName" placeholder="Course Name">
+    <input type="text" id="courseCode" placeholder="Course Code">
+    <button onclick="createCourse()">Create Course</button>
+
+    <!-- Form for enrolling student -->
+    <h2>Enroll Student</h2>
+    <input type="text" id="studentName" placeholder="Student Name">
+    <select id="courseSelect">
+        <option value="">Select a Course</option>
+    </select>
+    <button onclick="enrollStudent()">Enroll Student</button>
+
+    <!-- List of courses and students -->
+    <div class="course-list" id="courseList"></div>
+</div>
+
+<script>
+// Course class
+class Course {
+    constructor(name, code) {
+        this.name = name;
+        this.code = code;
+        this.enrolledStudents = [];
+    }
+
+    // Enroll a student
+    enrollStudent(studentName) {
+        if (!this.enrolledStudents.includes(studentName)) {
+            this.enrolledStudents.push(studentName);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // Remove a student
+    removeStudent(studentName) {
+        const index = this.enrolledStudents.indexOf(studentName);
+        if (index !== -1) {
+            this.enrolledStudents.splice(index, 1);
+        }
+    }
+
+    // Get the list of students
+    listStudents() {
+        return this.enrolledStudents;
+    }
+}
+
+// Store courses
+const courses = [];
+
+// Function to create a course
+function createCourse() {
+    const courseName = document.getElementById('courseName').value;
+    const courseCode = document.getElementById('courseCode').value;
+
+    if (courseName && courseCode) {
+        const newCourse = new Course(courseName, courseCode);
+        courses.push(newCourse);
+        updateCourseSelect();
+        displayCourses();
+        document.getElementById('courseName').value = '';
+        document.getElementById('courseCode').value = '';
+    } else {
+        alert('Please provide both course name and code.');
+    }
+}
+
+// Update course select dropdown
+function updateCourseSelect() {
+    const courseSelect = document.getElementById('courseSelect');
+    courseSelect.innerHTML = '<option value="">Select a Course</option>'; // Reset
+    courses.forEach((course, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = `${course.name} (${course.code})`;
+        courseSelect.appendChild(option);
+    });
+}
+
+// Function to enroll a student in a selected course
+function enrollStudent() {
+    const studentName = document.getElementById('studentName').value;
+    const selectedCourseIndex = document.getElementById('courseSelect').value;
+
+    if (studentName && selectedCourseIndex !== '') {
+        const course = courses[selectedCourseIndex];
+        if (course.enrollStudent(studentName)) {
+            displayCourses();
+            document.getElementById('studentName').value = '';
+        } else {
+            alert(`${studentName} is already enrolled in this course.`);
+        }
+    } else {
+        alert('Please select a course and provide a student name.');
+    }
+}
+
+// Function to remove a student from a course
+function removeStudent(courseIndex, studentName) {
+    const course = courses[courseIndex];
+    course.removeStudent(studentName);
+    displayCourses();
+}
+
+// Function to display all courses and students
+function displayCourses() {
+    const courseListDiv = document.getElementById('courseList');
+    courseListDiv.innerHTML = ''; // Clear previous list
+
+    courses.forEach((course, courseIndex) => {
+        const courseDiv = document.createElement('div');
+        courseDiv.innerHTML = `<h3>${course.name} (${course.code})</h3>`;
+
+        if (course.listStudents().length > 0) {
+            const studentList = document.createElement('ul');
+            course.listStudents().forEach(studentName => {
+                const studentItem = document.createElement('li');
+                studentItem.textContent = studentName;
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'Remove';
+                removeButton.onclick = () => removeStudent(courseIndex, studentName);
+                studentItem.appendChild(removeButton);
+                studentList.appendChild(studentItem);
+            });
+            courseDiv.appendChild(studentList);
+        } else {
+            courseDiv.innerHTML += '<p>No students enrolled yet.</p>';
+        }
+
+        courseListDiv.appendChild(courseDiv);
+    });
+}
+
+</script>
+
+</body>
+</html>
